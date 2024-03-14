@@ -11,6 +11,7 @@ namespace byteStream.Employer.API.Data
         }
         public DbSet<Employeer> Employers { get; set; }
         public DbSet<Vacancy> Vacancies { get; set; }
+        public DbSet<UserVacancyRequests> UserVacancyRequests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

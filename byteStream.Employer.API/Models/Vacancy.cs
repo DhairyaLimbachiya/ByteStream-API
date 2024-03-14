@@ -7,7 +7,9 @@ namespace byteStream.Employer.API.Models
     {
         public Guid Id { set; get; }
 
+        public string JobTitle { set; get; }
         public string PublishedBy { set; get; }
+
 
         public DateTime PublishedDate { set; get; }
 
@@ -17,7 +19,7 @@ namespace byteStream.Employer.API.Models
 
         public string JobDescription { set; get; }
 
-        public int ExperienceRequired { set; get; }
+        public string ExperienceRequired { set; get; }
 
         public DateTime LastDate { set; get; }
 
@@ -25,9 +27,10 @@ namespace byteStream.Employer.API.Models
 
         public int MaxSalary { set; get; }
 
-        public Guid EmployerId { get; set; }
+        
+        //[ForeignKey("Employer")]
+        //public Guid EmployerId { get; set; }
 
-        [ForeignKey("EmployerId")]
-        public  Employeer  employer{ get; set; }
+        //public  Employeer  employer{ get; set; }
     }
 }

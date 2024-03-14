@@ -8,20 +8,20 @@ namespace byteStream.Employer.Api.Models
 
         public string Organization { get; set; }
 
-        public string OrgnizationType { get; set; }
+        public string OrganizationType { get; set; }
 
         public string CompanyEmail { get; set; }
 
         public string CompanyPhone { get; set; }
 
-        public string NoOfEmployees { get; set; }
+        public int NoOfEmployees { get; set; }
 
-        public string StartYear { get; set; }
+        public int StartYear { get; set; }
 
         public string About { get; set; }
 
         public string CreatedBy { get; set; }
 
-        public ICollection<Vacancy> Vacancy { get; set; }
+        //public ICollection<Vacancy> Vacancy { get; set; }
     }
 }

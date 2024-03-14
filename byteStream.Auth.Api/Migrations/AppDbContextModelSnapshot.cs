@@ -51,19 +51,19 @@ namespace byteStream.Auth.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "43dd7337-d954-4157-8a9c-a718fb557028",
+                            Id = "53e5174a-07ac-47d2-89c4-15a78424c14a",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "c5f517ce-4036-43b7-a0e7-8c21a86cae7f",
+                            Id = "64363a37-fb2d-4ab1-a7fe-e02ee9d9cd3d",
                             Name = "Employer",
                             NormalizedName = "EMPLOYER"
                         },
                         new
                         {
-                            Id = "515d135c-2779-44ba-a00c-90351d3e4cf5",
+                            Id = "ee8f83f3-168b-46d8-9a0f-3e54ae403c93",
                             Name = "JobSeeker",
                             NormalizedName = "JOBSEEKER"
                         });

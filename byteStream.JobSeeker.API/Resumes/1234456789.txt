@@ -1,0 +1,526 @@
+01-02
+
+-> Training Videos day-04
+	-> Deployment slots
+	-> Database initialization
+	-> Docker container deployment
+	-> Unit Tests using xunit
+
+-> Minimal API
+	-> why minimal API
+	-> AutoMapper for mapping DTO to models
+	-> custom validations
+
+02-02
+
+-> Udemy MVC dotnetmastery course
+	-> section-3
+		-> Razor page overview
+		-> Page folder structure
+		-> asp-page attribute
+		-> OnGet(), onPost() methods
+		-> [BindProperty], [BindProperties]
+		-> redirectToPage() method
+
+	-> section-4 
+		-> bootswatch and styling configuration
+		-> N-Tier Architecture
+		-> Dependency Injection Lifetime
+
+	-> section-5 upto 76
+		-> Repository Pattern
+		-> Moved all methods and dbContext into Repository
+
+-> Training Session on GIT
+
+05-02
+
+-> Udemy MVC dotnetmastery course
+	-> section-5
+		-> UnitOfWork [why, pros, cons]
+		-> Areas in .Net
+		-> Area(), asp-area="" attribute
+
+	-> section-6
+		-> Product Model, View, Controller
+		-> Foreign Key in EF Core
+		-> Projections in EF Core
+		-> ViewBag, ViewData, ViewModel
+		-> file upload functionality
+		-> Merging create and edit product page
+		-> Include method for pupulating navigation properties
+		-> DataTables API Calls
+		-> get and delete api
+		-> sweetalerts configurations
+
+06-02
+
+-> Udemy MVC dotnetmastery course
+	-> section-7
+		-> Home and Details Page
+
+	-> section-8
+		-> IdentityDbContext, IdentityTables
+		-> Custom Identity User, Identity Roles and assigning to users
+		-> Discrminator column
+		-> Authorization
+		-> Some UI Changes
+
+	-> section-9
+		-> Company Model, View, Controller, Database
+		-> Relationship with User
+
+07-02
+-> Udemy MVC dotnetmastery course
+	-> section-10
+		-> Shoppingcart Model, Repository
+		-> ShoppingCartVM
+		-> [NotMapped] Attribute
+		-> Add to cart implementation
+		-> Shopping Cart Controller, View
+		-> Summary View
+
+	-> section-11
+		-> OrderHeader, OrderDetails Tables
+		-> Summary UI
+		-> Order Status overview
+		-> Order Confirmation Page
+		-> Stripe configuaration, integration
+
+	-> section-12 upto video 6
+		-> OrderController
+		-> OrderVM
+		-> dynamic classes
+
+08-02
+-> Udemy MVC dotnetmastery course
+	-> section-12
+		-> Order Details Page
+		-> Order Processing implementation
+		-> Order Cancel Implementation
+
+	-> section-13
+		-> Authorization for all routes
+		-> Sessions in .net
+		-> View Component
+		-> FacebookLogin as an authentication
+		-> User Creation by Admin
+
+	-> section-14
+		-> DbInitializer
+		-> Email functionality using sendgrid
+		-> Deployment using azure
+
+	-> section-15
+		-> User Management functionality
+		-> User Lock Unlock
+		-> User Role Management
+
+09-02
+-> Udemy MVC dotnetmastery course
+	-> section-16
+		-> Product Image Table
+		-> Multiple Image Upload functionality
+		-> Bootstrap Carousel
+		-> Microsoft Login as asn authentication
+
+Training Session on DevOps
+
+-> Udemy Microservice dotnetmastery course
+	-> section-1
+		-> overview of course
+		-> microservice architecture what, why
+
+	-> section-2 upto 18 
+		-> CouponAPI Service
+		-> Model and Dto creation
+
+12-02
+-> Udemy Dotnetmastery course
+	-> section-2
+		-> GetAll and Get Method
+		-> Common Response
+		-> AutoMapper
+		-> Crud operations on CouponAPI
+
+	-> section-3
+		-> FrontEnd Microservice
+		-> BaseService and CouponService
+		-> HttpClientFactory configuration
+		-> coupon controller implementation
+		-> CouponIndex view
+		-> CouponCreate View and method
+		-> CouponDelete View and method
+		-> toastr notifications
+
+	-> section-4
+		-> AuthAPI Microservice
+		-> Identity Configurations
+		-> jwt configuration
+		-> Auth Services Implementation[Login and Register]
+		-> Jwt Token Generation
+		-> Assign User Roles
+
+	-> section-5 upto 57
+		-> AuthController and AuthService in Web Project
+		-> Login and Register Views
+		-> Login action implementation
+
+-> Training Session on QA
+
+13-02
+-> Udemy Dotnetmastery course
+	-> section-5
+		-> Login and logout implementation
+		-> CouponAPI Authorization
+		-> Role base access for CouponAPI
+
+	-> section-6
+		-> ProductAPI microservice
+		-> Controller, Views, Database configurations
+		-> Consuming ProductAPI in web Project
+
+	-> section-7
+		-> Home Page UI
+		-> Details Page UI
+
+	-> section-8 upto 82
+		-> ShoppingCartAPI Microservice
+		-> Models and Dto
+
+-> Training Session on Cloud
+
+14-02
+-> Udemy Dotnetmastery course
+	-> section-8
+		-> Upsert method implementation for Shopping Cart
+		-> Romove Cart Logic
+		-> GetCart endpoint in ShoppingCartAPI
+		-> Calling PorductAPI, CouponAPI in ShoppingCartAPI
+		-> Applying Discount in ShoppingCart
+
+	-> section-9
+		-> Consuming ShoppingCart in Web Project 
+		-> Shopping Cart UI
+		-> Shopping Cart Functionalities
+		-> Delegate Handlers
+		-> Asynchronous and synchronous communication
+
+	-> section-10
+		-> Service Bus Overview
+		-> Message Bus Service Implementaion
+		-> Message Bus implementation in Web project and ShoppingCartAPI
+
+15-02
+-> Udemy Microservice Course
+	-> section-11
+		-> EmailAPI Microservice Creation and Configurations
+		-> EmailService Implementation for shoppingCart
+		-> EmailService Implementation for New Users
+
+	-> section-12
+		-> Checkout UI
+		-> OrderAPI Microservice 
+		-> Models, Dto, Database and Basic API Configurations
+		-> MappingConfiguration for OrderAPI
+		-> OrderAPIController
+		-> Consuming OrderAPI in Web Project
+
+	-> Section-13
+		-> StripeSession EndPoint in OrderAPI
+		-> Stripe Session in Web Project
+		-> Integrating Coupon in stripe
+		-> Validating Stripe Session
+
+	-> section-14
+		-> Message Bus Service for RewardsAPI
+		-> Topics and Subscriptions in Azure Service Bus
+		-> Another Method for EmailAPI
+
+16-02
+-> Udemy Microservice Course
+	-> section-15
+		-> Endpoints for order Management in OrderAPI
+		-> OrderUI in Web Project
+		-> Datatables to display orders
+		-> Order Detail UI
+		-> Order Status Management
+		-> Filter functionality in order detail UI
+
+	-> section-16
+		-> Image Upload Functionality
+		-> Custom validation for image upload
+
+	-> section-17
+		-> API Gateway overview
+		-> GateWay Project
+		-> Ocelot and Jwt Authentication configuration
+		-> Product, Coupon Functional with Ocelot
+		-> Shopping Cart, Order Functional with Ocelot
+
+	-> section-18
+		-> Database creation for each API on Azure
+		-> Appsettings for Production
+		-> API Deployment to azure
+		-> Deploying Web Project and Gateway Solution
+
+19-02
+-> Udemy Microservice Course
+	-> section-19
+		-> RabbitMQ Installation
+		-> Implementation in AuthAPI, Shopping CartAPI
+		-> Consuming Messages in EmailAPI
+		-> Exchange Fanout for RewardsAPI, OrderAPI
+		-> Consuming Message in EmailAPI
+
+-> Udemy Angular Course
+	-> lab-01
+		-> Angular cli installation
+		-> npm and typescript overview
+		-> Folder structure in angular
+		-> configuration files overview
+		-> Components and Modules
+		-> WebPack Package Management
+		-> ng build vs ng serve
+
+	-> lab-02
+		-> Naming Conventions
+		-> Creating UI and Model 
+		-> Consuming Model
+		-> one way and Two Way Binding
+		-> *ngFor loop
+
+	-> lab-03
+		-> Multiple UI's and components
+		-> Organizing all Views and Components in different folders
+		-> Configuring all components into Module
+		-> Routing and Routing Collection
+		-> router-outlet and routerLink
+
+	-> lab-04 upto chapter-43
+		-> performance issues in Eager loading
+		-> lazy loading
+		-> Dividing all code into Different Modules
+
+-> Training Session on Angular
+
+20-02
+-> Udemy Angular Course
+	-> lab-04
+		-> loadChildren for lazy loading
+		-> Angular Architecture with lazy loading
+
+	-> lab-05
+		-> Validation object Model
+		-> FormGroup, FormControl, FormBuilder, Validators
+		-> Create, Connect and Check process
+		-> valid and dirty flag
+
+	-> lab-06
+		-> Tight and Loose Coupling
+		-> Dependency Architecture in Angular
+		-> Conditional and Centralized Dependency Injection
+		-> Providers, tokens, injectors
+
+	-> lab-07
+		-> user controller
+		-> input, output, event emmiter
+		-> Reusable Components working and flow
+
+	-> lab-08
+		-> Http calls in Angular
+		-> Http and HttpClient
+		-> Data Transfer Objects
+		-> Interceptors
+
+	-> lab-09
+		-> Integrating Angular with MVC project
+		-> Configuration in Visual Studio
+		-> Individual build
+
+	-> lab-10
+		-> Migrating from Angular 6 to 7
+
+	-> lab-11
+		-> Unit, Integration, BlackBox, WhiteBox Testing
+		-> Jasmine And Karma
+		-> Behavior Driven Developement
+		-> BeforeEach, BeforeAll, AfterEach, AfterAll
+		-> TestBed API
+		-> fixture, appComponent, nativeComponent
+
+21-02
+-> Udemy Angular and Rest API course
+	-> section-1
+		-> Overview and installation
+
+	-> section-2
+		-> REST Overview
+		-> API Project Creation
+		-> HTTP verbs
+		-> Routing in ASP.Net
+		-> Models and Dtos for BlogPost and Category
+		-> DbContext Configuration
+		-> Category Controller Post Endpoint
+		-> Repository Pattern
+
+	-> section-3
+		-> Angular Project Creation and Understanding all files
+		-> Bootstrap configuration
+		-> Navbar Component and routing
+		-> Category-list and add-category component, UI
+		-> templateForms and http calls
+		-> CORS Policy
+		-> subscribe and unsubscribe in obeservable
+
+	-> section-4
+		-> GetAll Endpoint in Category Controller
+		-> Category List UI
+		-> async pipe in action
+
+	-> section-5
+		-> Update, GetById Endpoint in Category Controller
+		-> Edit-Category UI
+	
+	-> section-6
+		-> Delete Endpoint in Category Controller
+		-> Delete-Category UI
+
+-> Training Session on AI/ML
+
+22-02
+-> Udemy Angular and Rest API course
+	-> section-7
+		-> Add-BlogPost UI and service
+		-> Post Endpoint for Creating BlogPost in BlogPost Controller
+
+	-> section-8
+		-> Seeding Database with blogposts
+		-> GetAll Endpoint in BlogPost Controller
+		-> BlogPost-list UI
+
+	-> section-9
+		-> Live Markdown Preview Functionality
+		-> Live Image Preview Functionality
+
+	-> section-10
+		-> Adding EF Core Relationships
+		-> Modifying the Post, GetAllBlogPosts Endpoints in API
+
+	-> section-11
+		-> Put Endpoint in BlogPost Controller
+		-> Edit-BlogPost UI
+
+	-> section-12
+		-> Delete Endpoint in BlogPost Controller
+		-> Delete Functionality in UI
+
+	-> section-13
+		-> Image Controller, Model, Dto and Repository
+		-> Post Endpoint for File Image Functionality
+
+23-02
+-> Udemy Angular and Rest API course
+	-> section-13
+		-> GetAll Endpoint in Image Controller
+		-> Image Upload Functionality in Add-blog-post UI and Edit-blog-post UI
+
+	-> section-14
+		-> Home Page UI for Displaying All BlogPosts
+		-> Blog Post Details UI for individual BlogPost
+		-> GetByUrl Endpoint in BlogPost Controller
+
+	-> section-15
+		-> Authorization and Authentication overview
+		-> Authentication flow
+		-> Creating Identity Tables
+		-> Seeding Roles and Users
+		-> Register and Login Methods in Auth Controller
+		-> Generating Jwt Token for Authorization
+		-> Role-Base Authorization
+		-> login UI
+		-> Auth Service
+		-> Storing Jwt Tokens
+		-> Logout Functionality
+		-> Interceptors
+		-> Auth Guard for Route Protection
+
+26-02
+-> Case Study
+	-> AuthAPI as a microservice Created
+	-> Identity User Configuration
+	-> Seeding Roles and Users
+	-> Register and Login Endpoints in AuthController
+	-> Jwt Token Generation for logged in User
+
+	-> Angular Project Created
+	-> created navbar UI
+	-> Register functionality and UI
+	-> Login functionality and UI
+	-> Logout Functionality
+	-> storing jwt Token as Cookie 
+
+	-> EmployerAPI as a microservice Created
+	-> Database Configuration
+	-> Mapping Configuration
+	-> Post EndPoint in Company Controller
+	-> GetByEmail Endpoint in Company Controller
+
+27-02
+-> Case Study
+	-> EmployerAPI as a microservice
+	-> Put Endpoint in Company Controller
+	-> Vacancy Database Configuration
+	-> Post Endpoint in Vacancy Controller
+	-> GetByName Endpoint in Vacancy Controller
+
+	-> Angular Project Updated
+	-> Organization-Info Functionality and UI
+	-> Add-Organization-Details Functionality and UI
+	-> Edit-Organization-Details Functionality and UI
+	-> Vacancy-list Functionality and UI
+	-> Add-Vacancy Functionality and UI
+
+28-02
+-> Case Study
+	-> EmployerAPI as a microservice
+	-> Some logic shifted to Backend
+	-> GetAll Endpoint in Vacancy Controller
+	-> Put Endpoint in Vacancy Controller
+	-> GetById Endpoint in Vacancy Controller
+	-> Delete Endpoint in Vacancy Controller
+	-> VacancyDto Splited into Request and Response
+	-> GetProfileByName in Employer Controller
+
+	-> JobSeekerAPI as a microservice
+	-> API Created and Basic configuration
+	-> Post Endpoint in Profile Controller
+	-> GetByEmail Endpoint in Profile Controller
+	-> Put Endpoint in Profile Controller
+
+	-> Angular Project
+	-> Some Logic Moved to Backend
+	-> Vacancy-Details UI and functionality
+	-> Edit-Vacancy UI and functionality
+	-> Job-detail UI
+	-> Home Component UI
+	-> User Profile UI and Functionality
+	-> Add-User Profile UI and Functionality
+	-> Edit-User Profile UI and Functionality
+
+29-02
+-> Case Study
+	-> JobSeekerAPI as a microservice
+	-> Qualifications and UserExperiences Models and Dtos
+	-> Qualification Controller, Repository Pattern
+	-> GetByUserId, GetById Endpoint in Qualification Controller
+	-> Post, Put and delete Endpoint in Qualification Controller
+	-> Experience Controller, Repository Pattern
+	-> GetByUserId, GetById Endpoint in Experience Controller
+	-> Post, Put and delete Endpoint in Experience Controller
+
+	-> Angular Project
+	-> Qualification-list UI
+	-> add-qualification, edit-qualification UI and Functionality
+	-> Experience-list UI
+	-> add-experience, edit-experience UI and Functionality

@@ -1,0 +1,6 @@
+@byteStream.JobSeeker.API_HostAddress = http://localhost:5183
+
+GET {{byteStream.JobSeeker.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

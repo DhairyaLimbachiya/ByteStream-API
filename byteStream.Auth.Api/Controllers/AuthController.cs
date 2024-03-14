@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure;
 using byteStream.Auth.Api.Models;
 using byteStream.Auth.Api.Services.IServices;
 using byteStream.Auth.Api.Utility.ApiFilter;
@@ -13,16 +14,19 @@ namespace byteStream.Auth.Api.Controllers
 	[ApiController]
 	public class AuthController : ControllerBase
 	{
-		private readonly IMapper mapper;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IMapper mapper;
 		private readonly IAuthService authService;
 		protected ResponseDto _responseDto;
 
-		public AuthController(IMapper mapper, IAuthService authService)
+		public AuthController(UserManager<ApplicationUser> userManager, IMapper mapper, IAuthService authService)
 		{
-			this.mapper = mapper;
+            _userManager = userManager;
+            this.mapper = mapper;
 			this.authService = authService;
 			_responseDto = new ResponseDto();
-		}
+            
+        }
 
 
 		[HttpPost("register")]
@@ -55,13 +59,28 @@ namespace byteStream.Auth.Api.Controllers
 
 
 		}
-		[Authorize(Roles ="Employer")]
-		[HttpGet]
 
-		public async Task<IActionResult> hello()
-		{
-			return Ok("hello");
-		}
+        [HttpPost]
+        [Route("forgotpassword")]
+        public async Task<IActionResult> ForgotPassword([FromBody] LoginRequestDto request)
+        {
+            
+            {
+                var user = await _userManager.FindByEmailAsync(request.UserName);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    var identityResult = await _userManager.ResetPasswordAsync(user, token, request.Password);
+                    
+                }
+            }
+            return Ok();
+        }
 
-	}
+
+    }
 }

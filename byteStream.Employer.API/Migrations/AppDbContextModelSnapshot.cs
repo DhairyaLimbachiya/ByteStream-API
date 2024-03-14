@@ -28,13 +28,15 @@ namespace byteStream.Employer.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("EmployerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("ExperienceRequired")
-                        .HasColumnType("int");
+                    b.Property<string>("ExperienceRequired")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("JobDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("JobTitle")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -63,8 +65,6 @@ namespace byteStream.Employer.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployerId");
-
                     b.ToTable("Vacancies");
                 });
 
@@ -90,40 +90,55 @@ namespace byteStream.Employer.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("NoOfEmployees")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("NoOfEmployees")
+                        .HasColumnType("int");
 
                     b.Property<string>("Organization")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OrgnizationType")
+                    b.Property<string>("OrganizationType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("StartYear")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("StartYear")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.ToTable("Employers");
                 });
 
-            modelBuilder.Entity("byteStream.Employer.API.Models.Vacancy", b =>
+            modelBuilder.Entity("byteStream.Employer.Api.Models.UserVacancyRequests", b =>
                 {
-                    b.HasOne("byteStream.Employer.Api.Models.Employeer", "employer")
-                        .WithMany("Vacancy")
-                        .HasForeignKey("EmployerId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("AppliedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("VacancyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VacancyId");
+
+                    b.ToTable("UserVacancyRequests");
+                });
+
+            modelBuilder.Entity("byteStream.Employer.Api.Models.UserVacancyRequests", b =>
+                {
+                    b.HasOne("byteStream.Employer.API.Models.Vacancy", "Vacancy")
+                        .WithMany()
+                        .HasForeignKey("VacancyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("employer");
-                });
-
-            modelBuilder.Entity("byteStream.Employer.Api.Models.Employeer", b =>
-                {
                     b.Navigation("Vacancy");
                 });
 #pragma warning restore 612, 618
