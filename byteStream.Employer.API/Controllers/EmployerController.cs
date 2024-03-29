@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure;
 using byteStream.Employer.Api.Models;
 using byteStream.Employer.Api.Utility.ApiFilter;
 using byteStream.Employer.API.Models.Dto;
@@ -18,12 +19,15 @@ namespace ByteStream.Employer.Api.Controllers
 	{
 		private readonly IEmployerService employerService;
 		private readonly IMapper mapper;
-
-		public EmployerController(IEmployerService employerService,IMapper mapper)
+		private readonly IImageService imageService;
+        protected ResponseDto response;
+        public EmployerController(IEmployerService employerService,IMapper mapper,IImageService imageService)
         {
 			this.employerService = employerService;
 			this.mapper = mapper;
-		}
+			this.imageService=imageService;
+            response = new();
+        }
 
 		[HttpGet]
 		[Route("GetByCompanyName/{companyName}")]
@@ -50,35 +54,67 @@ namespace ByteStream.Employer.Api.Controllers
 			return Ok(dto);
 		}
 
-		
-		
-
-
-
 
 		[HttpPost]
 		
 		[Authorize(Roles = "Employer")]
-
-
 		public async Task<IActionResult> Create([FromBody] AddEmployerDto addRequestDto)
 		{
 
 			var domain = mapper.Map<Employeer>(addRequestDto);
-			domain.Id = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var nameIdentifierClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            domain.Id = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 			domain.CreatedBy=HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
 			domain = await employerService.CreateAsync(domain);
 			var dto = mapper.Map<EmployerDto>(domain);
 			return CreatedAtAction(nameof(GetById), new { id = dto.ID }, dto);
-
-
 		}
 
+        [HttpPost]
+        [Route("uploadImage")]
+        [Authorize(Roles = "Employer")]
+
+        public async Task<IActionResult> UploadImage([FromForm] IFormFile file, [FromForm] string fileName)
+        {
+            ValidateFileUpload(file);
+
+            if (ModelState.IsValid)
+            {
+                var resume = new CompanyLogoDto
+                {
+                    FileExtension = Path.GetExtension(file.FileName).ToLower(),
+                    FileName = fileName
+                };
+
+                resume = await imageService.Upload(file, resume);
+                response.Result = resume.Url;
+            }
+            else
+            {
+                response.IsSuccess = false;
+                response.Message = "Image Upload Model is not Valid";
+            }
+            return Ok(response);
+        }
+        private void ValidateFileUpload(IFormFile file)
+        {
+            var allowedExtensions = new string[] { ".jpg", ".jpeg", ".png" };
+
+            if (!allowedExtensions.Contains(Path.GetExtension(file.FileName).ToLower()))
+            {
+                ModelState.AddModelError("file", "Unsupported File Format");
+            }
+
+            if (file.Length > 10 * 1024 * 1024)
+            {
+                ModelState.AddModelError("file", "File Size cannot be more than 10MB");
+            }
+        }
 
 
 
 
-		[HttpPut]
+        [HttpPut]
 	
 		[Authorize(Roles = "Employer")]
 		public async Task<IActionResult> Update([FromBody] EmployerDto updateDto)
@@ -86,7 +122,9 @@ namespace ByteStream.Employer.Api.Controllers
 			if (ModelState.IsValid)
 			{
 				var domainModal = mapper.Map<Employeer>(updateDto);
-				domainModal = await employerService.UpdateAsync( domainModal);
+                domainModal.CreatedBy = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
+                domainModal.Id = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                domainModal = await employerService.UpdateAsync( domainModal);
 				if (domainModal == null) { return NotFound(); }
 				var dto = mapper.Map<EmployerDto>(domainModal);
 				return Ok(dto);

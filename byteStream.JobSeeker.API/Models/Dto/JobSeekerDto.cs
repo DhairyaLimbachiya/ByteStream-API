@@ -21,9 +21,11 @@
 		public DateTime DOB { get; set; }
 
         public string? ResumeURL { get; set; }
-
         public string? ProfileImgURL { get; set; }
 
+
+        public ICollection<ExperienceDto> Experience { get; set; }
+        public ICollection<QualificationDto> Qualification { get; set; }
 
     }
 }

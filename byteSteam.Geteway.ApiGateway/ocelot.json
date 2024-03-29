@@ -56,6 +56,21 @@
       }
     },
     {
+      "DownstreamPathTemplate": "/api/Employer/uploadImage",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Employer/uploadImage",
+      "UpstreamhttpMethod": [ "Post" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/Vacancy/getAll",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -122,7 +137,7 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/Vacancy",
+      "DownstreamPathTemplate": "/api/Vacancy/{id}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -130,7 +145,7 @@
           "Port": 7003
         }
       ],
-      "UpstreamPathTemplate": "/api/Vacancy",
+      "UpstreamPathTemplate": "/api/Vacancy/{id}",
       "UpstreamhttpMethod": [ "Delete" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -181,6 +196,55 @@
         "AuthenticationProviderKey": "Bearer"
       }
     },
+
+    {
+      "DownstreamPathTemplate": "/api/application/paginationEndpoint",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/application/paginationEndpoint",
+      "UpstreamhttpMethod": [ "Post" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/application/processApplication",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/application/processApplication",
+      "UpstreamhttpMethod": [ "Post" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+
+    {
+      "DownstreamPathTemplate": "/api/application/getDetailsbyApplication/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/application/getDetailsbyApplication/{id}",
+      "UpstreamhttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+
 
     // JobSeeker API
     {
@@ -238,6 +302,21 @@
         }
       ],
       "UpstreamPathTemplate": "/api/jobSeeker/uploadResume",
+      "UpstreamhttpMethod": [ "Post" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/jobSeeker/uploadImage",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7004
+        }
+      ],
+      "UpstreamPathTemplate": "/api/jobSeeker/uploadImage",
       "UpstreamhttpMethod": [ "Post" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -334,7 +413,7 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/experience",
+      "DownstreamPathTemplate": "/api/experience/{id}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -342,7 +421,7 @@
           "Port": 7004
         }
       ],
-      "UpstreamPathTemplate": "/api/experience",
+      "UpstreamPathTemplate": "/api/experience/{id}",
       "UpstreamhttpMethod": [ "Delete" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"

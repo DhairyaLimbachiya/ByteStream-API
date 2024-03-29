@@ -18,8 +18,9 @@ namespace byteStream.Auth.Api.Controllers
         private readonly IMapper mapper;
 		private readonly IAuthService authService;
 		protected ResponseDto _responseDto;
+ 
 
-		public AuthController(UserManager<ApplicationUser> userManager, IMapper mapper, IAuthService authService)
+        public AuthController(UserManager<ApplicationUser> userManager, IMapper mapper, IAuthService authService)
 		{
             _userManager = userManager;
             this.mapper = mapper;
@@ -28,20 +29,25 @@ namespace byteStream.Auth.Api.Controllers
             
         }
 
-
-		[HttpPost("register")]
+   
+        [HttpPost("register")]
 		[ValidateModel]
-		public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
-		{
-			var user = mapper.Map<ApplicationUser>(request);
-			var roleName = request.UserType.ToLower() == "employer" ? "Employer" : "JobSeeker";
-			_responseDto = await authService.RegisterAsync(user, request.Password, roleName);
-			_responseDto.Result = mapper.Map<UserDto>(_responseDto.Result);
-			return Ok(_responseDto);
-		}
+        public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
+        {
+            var user = mapper.Map<ApplicationUser>(request);
+            var roleName = request.UserType.ToLower() == "employer" ? "Employer" : "JobSeeker";
+            _responseDto = await authService.RegisterAsync(user, request.Password, roleName);
 
+            if (!_responseDto.IsSuccess)
+            {
+                return BadRequest(_responseDto.Message); 
+            }
 
-		[HttpPost("login")]
+            _responseDto.Result = mapper.Map<UserDto>(_responseDto.Result);
+            return Ok(_responseDto);
+        }
+
+        [HttpPost("login")]
 		[ValidateModel]
 
 		public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
@@ -55,7 +61,7 @@ namespace byteStream.Auth.Api.Controllers
 				};
 				return Ok(response);
 			}
-			return (Ok("Username or Password Incorrect!!!"));
+			return (Unauthorized("Username or Password Incorrect!!!"));
 
 
 		}

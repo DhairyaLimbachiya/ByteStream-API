@@ -11,8 +11,10 @@
 		public string Phone { get; set; }
 
 		public string Address { get; set; }
+        public string? ProfileImgURL { get; set; }
 
-		public double TotalExperience { get; set; }
+
+        public double TotalExperience { get; set; }
 
 		public int ExpectedSalary { get; set; }
 
@@ -20,7 +22,6 @@
 
         public string? ResumeURL { get; set; }
 
-        public string? ProfileImgURL { get; set; }
 
     }
 }

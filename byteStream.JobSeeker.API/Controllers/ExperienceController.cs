@@ -16,7 +16,7 @@ namespace byteStream.JobSeeker.API.Controllers
         private readonly IExperienceService experienceService;
         private readonly IMapper mapper;
 
-        public ExperienceController(IExperienceService experienceService,IMapper mapper)
+        public ExperienceController(IExperienceService experienceService, IMapper mapper)
         {
             this.experienceService = experienceService;
             this.mapper = mapper;
@@ -24,7 +24,7 @@ namespace byteStream.JobSeeker.API.Controllers
 
         [HttpGet]
         [Route("{id:Guid}")]
-    
+
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             var domain = await experienceService.GetByIdAsync(id);
@@ -32,18 +32,9 @@ namespace byteStream.JobSeeker.API.Controllers
             var dto = mapper.Map<ExperienceDto>(domain);
             return Ok(dto);
         }
-        [HttpGet]
-        [Route("getAllExperiences/{id}")]
-        public async Task<IActionResult> GetAll([FromRoute] Guid id)
-        {
-           // var id = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            var domain = await experienceService.GetAllAsync(id);
-            var dto = mapper.Map<List<ExperienceDto>>(domain);
-            return Ok(dto);
-        }
 
+       
         [HttpGet]
-        
         public async Task<IActionResult> GetAll()
         {
             var id = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
@@ -52,7 +43,7 @@ namespace byteStream.JobSeeker.API.Controllers
             return Ok(dto);
         }
 
-
+       
         [HttpPost]
         [ValidateModel]
         [Authorize(Roles = "JobSeeker")]
@@ -88,8 +79,6 @@ namespace byteStream.JobSeeker.API.Controllers
         [HttpDelete]
         [Route("{id:Guid}")]
         [Authorize(Roles = "JobSeeker")]
-
-
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var domainModal = await experienceService.DeleteAsync(id);

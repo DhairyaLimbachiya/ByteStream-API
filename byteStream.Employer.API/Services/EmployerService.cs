@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Drawing;
 using System.Security.Claims;
 
-namespace ByteStream.Employer.Api.Repository
+namespace byteStream.Employer.Api.Services
 {
     public class EmployerService : IEmployerService
 	{
@@ -32,14 +32,18 @@ namespace ByteStream.Employer.Api.Repository
 
 		public async Task<Employeer?> UpdateAsync( Employeer employer)
 		{
-		
-			dbContext.Employers.Update(employer);
+
+			var existingCompany = await dbContext.Employers.FirstOrDefaultAsync(x => x.Id == employer.Id);
+
+			if (existingCompany != null)
+			{
+				dbContext.Entry(existingCompany).CurrentValues.SetValues(employer);
+				await dbContext.SaveChangesAsync();
+				return employer;
+			}
+			return null;
 
 		
-
-			await dbContext.SaveChangesAsync();
-
-			return employer;
 		}
 
 		public async Task<Employeer?> DeleteAsync(Guid id)

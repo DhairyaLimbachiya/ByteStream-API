@@ -46,7 +46,7 @@ namespace byteStream.JobSeeker.API.Services
         public async Task<JobSeekers?> UpdateAsync(JobSeekers jobSeeker)
         {
             dbContext.JobSeekerss.Update(jobSeeker);
-             await dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
             return jobSeeker;
 
         }

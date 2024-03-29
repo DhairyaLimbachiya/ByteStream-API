@@ -1,5 +1,7 @@
-﻿using byteStream.Employer.Api.Models;
+﻿using Azure;
+using byteStream.Employer.Api.Models;
 using byteStream.Employer.API.Data;
+using byteStream.Employer.API.Models.Dto;
 using byteStream.Employer.API.Services.IServices;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,36 +10,68 @@ namespace byteStream.Employer.API.Services
   
     public class ApplicationService : IApplicationService
     {
-        private readonly AppDbContext _db;
+        private readonly AppDbContext db;
 
         public ApplicationService(AppDbContext db)
         {
-            _db = db;
+           this.db = db;
         }
+
 
         public async Task<UserVacancyRequests> CreateAsync(UserVacancyRequests request)
         {
-            await _db.UserVacancyRequests.AddAsync(request);
-            await _db.SaveChangesAsync();
+            await db.UserVacancyRequests.AddAsync(request);
+            await db.SaveChangesAsync();
 
             return request;
         }
 
         public async Task<List<UserVacancyRequests>> GetAllByUserIdAsync(Guid userId)
         {
-            var result = await _db.UserVacancyRequests.Where(request => request.UserId == userId).Include(u => u.Vacancy).ToListAsync();
+            var result = await db.UserVacancyRequests.Where(request => request.UserId == userId).Include(u => u.Vacancy).ToListAsync();
             return result;
         }
 
         public async Task<List<UserVacancyRequests>> GetAllByVacancyIdAsync(Guid vacancyId)
         {
-            var result = await _db.UserVacancyRequests.Where(request => request.VacancyId == vacancyId).Include(u => u.Vacancy).ToListAsync();
+            var result = await db.UserVacancyRequests.Where(request => request.VacancyId == vacancyId).Include(u => u.Vacancy).ToListAsync();
             return result;
+        }
+
+        public async Task<List<UserVacancyRequests>> GetAllVacnacyByPageAsync(SP_VacancyRequestDto request)
+        {
+            var result = db.UserVacancyRequests.FromSql($"UserVacancyRequestsSP @vacancyId = {request.VacancyId}, @pageNumber = {request.PageNumber}, @pageSize = {request.PageSize}").ToList();
+            List<UserVacancyRequests> response = result;
+            foreach (var item in response)
+            {
+                item.Vacancy = await db.Vacancies.FirstOrDefaultAsync(u => u.Id == item.VacancyId);
+            }
+
+            return response;
         }
 
         public async Task<UserVacancyRequests?> GetDetailAsync(Guid userId, Guid vacancyId)
         {
-            return await _db.UserVacancyRequests.FirstOrDefaultAsync(u => u.VacancyId == vacancyId && u.UserId == userId);
+            return await db.UserVacancyRequests.FirstOrDefaultAsync(u => u.VacancyId == vacancyId && u.UserId == userId);
+        }
+
+        public async Task<UserVacancyRequests?> GetDetailByIdAsync(Guid id)
+        {
+            return await db.UserVacancyRequests.FirstOrDefaultAsync(u=>u.Id == id);
+        }
+
+        public async Task<UserVacancyRequests?> UpdateAsync(UserVacancyRequests request)
+        {
+            var existingApplication = await db.UserVacancyRequests.FirstOrDefaultAsync(x => x.Id == request.Id);
+            if (request.ApplicationStatus == "Accepted")
+            {
+                var currentvacancy = db.Vacancies.FirstOrDefault(x => x.Id == request.VacancyId);
+                currentvacancy.NoOfVacancies = currentvacancy.NoOfVacancies - 1;
+            }
+          
+            db.Entry(existingApplication).CurrentValues.SetValues(request);
+            await db.SaveChangesAsync();
+            return request;
         }
     }
-}
+    }

@@ -16,9 +16,8 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
 
-
+//all the services of identity module
 builder.Services.AddScoped<IAuthService, AuthService>();
-
 builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
@@ -38,6 +37,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+//CORS Policy
 app.UseCors(options =>
 {
     options.AllowAnyHeader();

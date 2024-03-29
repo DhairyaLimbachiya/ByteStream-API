@@ -7,6 +7,7 @@ using byteStream.Employer.API.Services.IServices;
 using byteStream.JobSeeker.Api.Models.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace byteStream.Employer.API.Controllers
 {
@@ -17,14 +18,14 @@ namespace byteStream.Employer.API.Controllers
         private readonly IApplicationService applicationService;
         private readonly IProfileService profileService;
         private readonly IMapper mapper;
-       // protected ResponseDto response;
+        protected ResponseDto _response;
 
         public ApplicationController(IApplicationService applicationService, IMapper mapper, IProfileService profileService)
         {
             this.profileService = profileService;
             this.applicationService = applicationService;
             this.mapper = mapper;
-           // response = new ();
+            this._response = new();
         }
 
         [HttpGet]
@@ -54,8 +55,66 @@ namespace byteStream.Employer.API.Controllers
             {
                 return BadRequest();
             }
-            
-           List<UserVacancyRequests> result = await applicationService.GetAllByVacancyIdAsync(id);
+
+            List<UserVacancyRequests> result = await applicationService.GetAllByVacancyIdAsync(id);
+
+            List<UserVacancyResponseDto> response = [];
+            List<Guid> usersList = [];
+
+            foreach (var application in result)
+            {
+                usersList.Add(application.UserId);
+                response.Add(mapper.Map<UserVacancyResponseDto>(application));
+            }
+
+            List<UserDto> users = await profileService.GetUsers(usersList);
+
+            foreach (var item in response)
+            {
+                item.User = users.FirstOrDefault(u => u.Id == item.UserId);
+            }
+
+
+            return Ok(response);
+        }
+
+        [HttpPost]
+        [Route("createApplication")]
+        [Authorize(Roles = "JobSeeker")]
+        public async Task<IActionResult> createApplication([FromBody] UserVacancyRequestDto request)
+        {
+            if (request == null)
+            {
+                return BadRequest();
+            }
+
+            var dto = mapper.Map<UserVacancyRequests>(request);
+            var existingVacancy = await applicationService.GetDetailAsync(dto.UserId, dto.VacancyId);
+            if (existingVacancy != null)
+            {
+                return Ok(null);
+            }
+            dto.ApplicationStatus = "Pending";
+            var result = await applicationService.CreateAsync(dto);
+            var response = mapper.Map<UserVacancyResponseDto>(result);
+            return Ok(response);
+        }
+
+
+
+        [HttpPost]
+        [Route("paginationEndpoint")]
+        [Authorize]
+        public async Task<IActionResult> pagination([FromBody] SP_VacancyRequestDto request)
+        {
+            if (request == null)
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Request is Empty";
+            }
+            else
+            {
+                List<UserVacancyRequests> result = await applicationService.GetAllVacnacyByPageAsync(request);
                 List<UserVacancyResponseDto> response = [];
                 List<Guid> usersList = [];
 
@@ -70,30 +129,57 @@ namespace byteStream.Employer.API.Controllers
                 {
                     item.User = users.FirstOrDefault(u => u.Id == item.UserId);
                 }
-            
-            return Ok(response);
+                _response.Result = new
+                {
+                    totalRecords = response.First().TotalRecords,
+                    results = response
+                };
+
+            }
+            return Ok(_response);
         }
 
         [HttpPost]
-        [Route("createApplication")]
-        [Authorize(Roles = "JobSeeker")]
-        public async Task<IActionResult> createApplication([FromBody] UserVacancyRequestDto request)
+        [Route("processApplication")]
+
+        public async Task<IActionResult> processApplication([FromBody] ApplicationStatusChangeDto request)
         {
-            if (request == null)
+            string status = request.status;
+            var application = await applicationService.GetDetailByIdAsync(request.id);
+
+            if (application == null)
             {
-              return BadRequest();
+                _response.IsSuccess = false;
+                _response.Message = "Job Application Not Found";
+            }
+            else
+            {
+
+                application.ApplicationStatus = status;
+
+                var result = await applicationService.UpdateAsync(application);
+                if (result != null)
+                {
+                    _response.Result = mapper.Map<UserVacancyResponseDto>(result);
+                    _response.Message = "Status Updated Successfully";
+                }
+             
             }
 
-
-            var dto = mapper.Map<UserVacancyRequests>(request);
-            var existingVacancy = await applicationService.GetDetailAsync(dto.UserId, dto.VacancyId);
-            if (existingVacancy != null)
-            {
-                return Ok(null);
-            }
-            var result = await applicationService.CreateAsync(dto);
-            var response = mapper.Map<UserVacancyResponseDto>(result);
-            return Ok(response);
+            return Ok(_response);
         }
+
+        [HttpGet]
+        [Route("getDetailsbyApplication/{id}")]
+
+        public async Task<IActionResult> getDetailsbyApplication([FromRoute] Guid id)
+        {
+
+            var application = await applicationService.GetDetailByIdAsync(id);
+         //   mapper.Map<UserVacancyResponseDto>(application);
+            return Ok(application);
+
+        }
+
     }
-}
+    }

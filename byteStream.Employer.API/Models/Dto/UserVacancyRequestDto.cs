@@ -10,5 +10,6 @@ namespace byteStream.Employer.API.Models.Dto
         public Guid UserId { get; set; }
         public UserDto? User { get; set; }
         public DateTime AppliedDate { get; set; }
+        public int? TotalRecords { get; set; } = 0;
     }
 }

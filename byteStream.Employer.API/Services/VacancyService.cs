@@ -4,7 +4,7 @@ using byteStream.Employer.API.Models;
 using byteStream.Employer.API.Services.IServices;
 using Microsoft.EntityFrameworkCore;
 
-namespace ByteStream.Employer.Api.Repository
+namespace byteStream.Employer.API.Services
 {
 	public class VacancyService : IVacancyService
 	{

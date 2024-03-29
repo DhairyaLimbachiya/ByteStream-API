@@ -18,13 +18,13 @@ namespace byteStream.JobSeeker.API.Controllers
        
         private readonly IJobSeekerService jobSeekerService;
         private readonly IMapper mapper;
-        private readonly IResumeService resumeService;
+        private readonly IUploadService uploadService;
         protected ResponseDto response;
-        public JobSeekerController(IJobSeekerService jobSeekerService,IMapper mapper,IResumeService resumeService)
+        public JobSeekerController(IJobSeekerService jobSeekerService,IMapper mapper,IUploadService uploadService)
         {
             this.jobSeekerService = jobSeekerService;
             this.mapper = mapper;
-           this.resumeService = resumeService;
+           this.uploadService = uploadService;
             response = new();
         }
         [HttpGet]
@@ -40,7 +40,7 @@ namespace byteStream.JobSeeker.API.Controllers
             return Ok(dto);
         }
         [HttpGet]
-        //[Route("{id:Guid}")]
+       
         [Authorize]
         public async Task<IActionResult> GetById()
         {
@@ -73,15 +73,16 @@ namespace byteStream.JobSeeker.API.Controllers
         [Authorize(Roles = "JobSeeker")]
         public async Task<IActionResult> UploadResume([FromForm] IFormFile file, [FromForm] string fileName)
         {
+            ValidateFileUpload(file);
             if (ModelState.IsValid)
             {
-                var resume = new ResumeDto
+                var resume = new UploadDto
                 {
                     FileExtension = Path.GetExtension(file.FileName).ToLower(),
                     FileName = fileName
                 };
 
-                resume = await resumeService.Upload(file, resume);
+                resume = await uploadService.Upload(file, resume);
                 response.Result = resume.Url;
             }
             else
@@ -95,12 +96,12 @@ namespace byteStream.JobSeeker.API.Controllers
         }
 
         [HttpPut]
-        //[Route("{id:Guid}")]
         [Authorize(Roles = "JobSeeker")]
 
 
         public async Task<IActionResult> Update([FromBody] JobSeekerDto updateDto)
         {
+
             if (ModelState.IsValid)
             {
                 var domainModal = mapper.Map<JobSeekers>(updateDto);
@@ -115,7 +116,61 @@ namespace byteStream.JobSeeker.API.Controllers
             }
         }
 
+        [HttpPost]
+        [Authorize(Roles = "JobSeeker")]
+        [Route("uploadImage")]
+        public async Task<IActionResult> UploadImage([FromForm] IFormFile file, [FromForm] string fileName)
+        {
+            ValidateImageUpload(file);
 
+            if (ModelState.IsValid)
+            {
+                var image = new UploadDto
+                {
+                    FileExtension = Path.GetExtension(file.FileName).ToLower(),
+                    FileName = fileName
+                };
+
+                image = await uploadService.UploadImage(file, image);
+               response.Result = image.Url;
+            }
+            else
+            {
+                response.IsSuccess = false;
+                response.Message = "Image Upload Model is not Valid";
+            }
+            return Ok(response);
+        }
+
+
+        private void ValidateImageUpload(IFormFile file)
+        {
+            var allowedExtensions = new string[] { ".jpg", ".jpeg", ".png" };
+
+            if (!allowedExtensions.Contains(Path.GetExtension(file.FileName).ToLower()))
+            {
+                ModelState.AddModelError("file", "Unsupported File Format");
+            }
+
+            if (file.Length > 10 * 1024 * 1024)
+            {
+                ModelState.AddModelError("file", "File Size cannot be more than 10MB");
+            }
+        }
+        private void ValidateFileUpload(IFormFile file)
+        {
+            var allowedExtensions = new string[] { ".pdf", ".doc" };
+
+            if (!allowedExtensions.Contains(Path.GetExtension(file.FileName).ToLower()))
+            {
+                ModelState.AddModelError("file", "Unsupported File Format");
+            }
+
+            if (file.Length > 5 * 1024 * 1024)
+            {
+                ModelState.AddModelError("file", "File Size cannot be more than 5MB");
+            }
+        }
 
 
         [HttpDelete]

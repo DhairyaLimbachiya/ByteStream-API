@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using byteStream.Employer.Api.Models;
-using byteStream.Employer.Api.Models.Dto;
 using byteStream.Employer.API.Models;
 using byteStream.Employer.API.Models.Dto;
 

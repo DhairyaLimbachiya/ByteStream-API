@@ -26,6 +26,7 @@ namespace ByteStream.Employer.Api.Controllers
 
         [HttpGet]
         [Route("GetAll")]
+        [Authorize]
         public async Task<IActionResult> GetAllVacancies()
         {
             var vacancyList = await vacancyService.GetAllAsync();
@@ -34,12 +35,11 @@ namespace ByteStream.Employer.Api.Controllers
 
         [HttpGet]
         [Route("{id:Guid}")]
-        //[Authorize]
-
+        [Authorize]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             bool IsApplied;
-            Guid UserID = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            Guid UserID = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value); 
             IsApplied = await vacancyService.CheckApplicationAsync(UserID, id);
             var domain = await vacancyService.GetByIdAsync(id);
             if (domain == null) { return NotFound(); }
@@ -50,29 +50,22 @@ namespace ByteStream.Employer.Api.Controllers
 
 
 
-
         [HttpGet]
-
+        [ValidateModel]
         [Authorize(Roles = "Employer")]
-
         public async Task<IActionResult> GetByCompany()
         {
             var Id = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             var vacancyList = await vacancyService.GetByCompanyAsync(Id);
-
-            return Ok(vacancyList);
+            if (vacancyList.Count == 0)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return Ok(vacancyList);
+            }
         }
-
-        //     [HttpGet]
-        //     public async Task<IActionResult> GetAll()
-        //     {
-        ////var vacancylist = await vacancyService.GetAllAsync();
-        ////return Ok(vacancylist);
-        //return Ok();
-        //     }
-
-
-
 
         [HttpPost]
         [ValidateModel]
@@ -85,9 +78,7 @@ namespace ByteStream.Employer.Api.Controllers
             var domain = mapper.Map<Vacancy>(addRequestDto);
             domain.PublishedDate = DateTime.UtcNow;
             var Id = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-
             domain.PublishedBy = await employerService.GetOrganizationName(Id);
-
             domain = await vacancyService.CreateAsync(domain);
             var dto = mapper.Map<VacancyDto>(domain);
             return CreatedAtAction(nameof(GetById), new { id = dto.Id }, dto);
@@ -95,12 +86,8 @@ namespace ByteStream.Employer.Api.Controllers
 
         }
 
-
-
-
-
         [HttpPut]
-
+        [ValidateModel]
         [Authorize(Roles = "Employer")]
 
         public async Task<IActionResult> Update([FromBody] VacancyDto updateDto)
@@ -135,4 +122,6 @@ namespace ByteStream.Employer.Api.Controllers
             return Ok(dto);
         }
     }
+
+
 }

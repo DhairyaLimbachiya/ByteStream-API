@@ -65,7 +65,7 @@ namespace byteStream.Auth.Api.Services
                 return res;
 
             }
-            return res;
+          
         }
     }
 }

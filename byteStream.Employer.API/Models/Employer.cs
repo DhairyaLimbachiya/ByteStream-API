@@ -22,6 +22,6 @@ namespace byteStream.Employer.Api.Models
 
         public string CreatedBy { get; set; }
 
-        //public ICollection<Vacancy> Vacancy { get; set; }
+        public String ProfileImageUrl {  get; set; }
     }
 }

@@ -18,7 +18,9 @@
 
         public string About { get; set; }
 
-        public string CreatedBy { get; set; }
+       public string? CreatedBy { get; set; }
+       public String ProfileImageUrl { get; set; }
+
 
     }
 }
