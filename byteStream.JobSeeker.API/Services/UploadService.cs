@@ -12,11 +12,11 @@ namespace byteStream.JobSeeker.API.Services
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly AppDbContext db;
-        public UploadService(AppDbContext db, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor)
+        public UploadService( IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor)
         {
             this.webHostEnvironment = webHostEnvironment;
             this.httpContextAccessor = httpContextAccessor;
-            this.db = db;
+      
         }
 
         public async Task<UploadDto> Upload(IFormFile file, UploadDto resume)

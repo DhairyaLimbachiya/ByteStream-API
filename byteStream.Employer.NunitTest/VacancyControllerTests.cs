@@ -179,7 +179,8 @@ namespace byteStreamNunitTest
                 {
                     User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
                     {
-                        new Claim(ClaimTypes.NameIdentifier,  "42bf5685-6be6-44f5-85b4-084f6dfcc9b5") // Replace "UserIdValue" with a valid user ID
+                        new Claim(ClaimTypes.NameIdentifier,  "42bf5685-6be6-44f5-85b4-084f6dfcc9b5") // Replace "UserIdValue" with a valid user
+                                                                                                      // 
                     }))
                 }
             };

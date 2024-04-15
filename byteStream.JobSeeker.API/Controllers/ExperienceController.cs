@@ -40,7 +40,12 @@ namespace byteStream.JobSeeker.API.Controllers
             var id = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             var domain = await experienceService.GetAllAsync(id);
             var dto = mapper.Map<List<ExperienceDto>>(domain);
-            return Ok(dto);
+            if (dto.Count == 0) { return NoContent(); }
+            else
+            {
+                return Ok(dto);
+            }
+           
         }
 
        

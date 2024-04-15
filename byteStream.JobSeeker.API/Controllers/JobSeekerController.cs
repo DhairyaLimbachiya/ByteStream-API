@@ -35,7 +35,7 @@ namespace byteStream.JobSeeker.API.Controllers
         {
             //var id = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             var domain = await jobSeekerService.GetByIdAsync(id);
-            if (domain == null) { return NotFound(); }
+            if (domain == null) { return NoContent(); }
             var dto = mapper.Map<JobSeekerDto>(domain);
             return Ok(dto);
         }
@@ -46,7 +46,7 @@ namespace byteStream.JobSeeker.API.Controllers
         {
             var id = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             var domain = await jobSeekerService.GetByIdAsync(id);
-            if (domain == null) { return NotFound(); }
+            if (domain == null) { return NoContent(); }
             var dto = mapper.Map<JobSeekerDto>(domain);
             return Ok(dto);
         }

@@ -37,7 +37,8 @@ namespace byteStream.Auth.Api.Controllers
             var user = mapper.Map<ApplicationUser>(request);
             var roleName = request.UserType.ToLower() == "employer" ? "Employer" : "JobSeeker";
             _responseDto = await authService.RegisterAsync(user, request.Password, roleName);
-
+             
+            
             if (!_responseDto.IsSuccess)
             {
                 return BadRequest(_responseDto.Message); 
@@ -61,7 +62,7 @@ namespace byteStream.Auth.Api.Controllers
 				};
 				return Ok(response);
 			}
-			return (Unauthorized("Username or Password Incorrect!!!"));
+			return Unauthorized("Username or Password Incorrect!!!");
 
 
 		}
@@ -75,7 +76,7 @@ namespace byteStream.Auth.Api.Controllers
                 var user = await _userManager.FindByEmailAsync(request.UserName);
                 if (user == null)
                 {
-                    return NotFound();
+                    return NotFound("User Not Found");
                 }
                 else
                 {

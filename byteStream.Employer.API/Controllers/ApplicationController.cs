@@ -30,7 +30,7 @@ namespace byteStream.Employer.API.Controllers
 
         [HttpGet]
         [Route("getAllByUser/{id}")]
-        [Authorize]
+        [Authorize ]
         public async Task<IActionResult> getApplicationsByUserId([FromRoute] Guid id)
         {
             if (id == Guid.Empty)

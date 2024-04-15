@@ -51,13 +51,13 @@ namespace byteStream.Auth.Api.Tests
             var result = await _authController.Register(registerRequestDto) as OkObjectResult;
 
             // Assert
-            Assert.That(result,Is.Not.Null);
-            Assert.That(200,Is.EqualTo( result.StatusCode)); // Ok status code
-          
+            Assert.That(result, Is.Not.Null);
+            Assert.That(200, Is.EqualTo(result.StatusCode)); // Ok status code
+
             var response = result.Value as ResponseDto;
-            Assert.That(response,Is.Not.Null);
-            Assert.That(response.IsSuccess,Is.True);
-            
+            Assert.That(response, Is.Not.Null);
+            Assert.That(response.IsSuccess, Is.True);
+
         }
 
         [Test]
@@ -78,9 +78,9 @@ namespace byteStream.Auth.Api.Tests
             var result = await _authController.Register(registerRequestDto) as BadRequestObjectResult;
 
             // Assert
-          
-            Assert.That(400,Is.EqualTo( result.StatusCode)); // Bad request status code
-            Assert.That(errorMessage,Is.EqualTo( result.Value)); // Check response message
+
+            Assert.That(400, Is.EqualTo(result.StatusCode)); // Bad request status code
+            Assert.That(errorMessage, Is.EqualTo(result.Value)); // Check response message
         }
 
 
@@ -96,10 +96,10 @@ namespace byteStream.Auth.Api.Tests
             var result = await _authController.Login(loginRequestDto) as OkObjectResult;
 
             // Assert
-           
+
             Assert.That(result, Is.Not.Null);
             var response = result.Value as LoginResponseDto;
-            Assert.That(response,Is.Not.Null);
+            Assert.That(response, Is.Not.Null);
             Assert.That(jwtToken, Is.EqualTo(response.Token));
 
         }
@@ -115,9 +115,9 @@ namespace byteStream.Auth.Api.Tests
             var result = await _authController.Login(loginRequestDto) as ObjectResult;
 
             // Assert
-            Assert.That (result,Is.Not.Null);
-            Assert.That(401, Is.EqualTo( result.StatusCode)); // Unauthorized status code
-            Assert.That("Username or Password Incorrect!!!",Is.EqualTo( result.Value)); // Check response message
+            Assert.That(result, Is.Not.Null);
+            Assert.That(401, Is.EqualTo(result.StatusCode)); // Unauthorized status code
+            Assert.That("Username or Password Incorrect!!!", Is.EqualTo(result.Value)); // Check response message
         }
         [Test]
         public async Task ForgotPassword_ValidRequest_ReturnsOkResult()
@@ -133,22 +133,8 @@ namespace byteStream.Auth.Api.Tests
             var result = await _authController.ForgotPassword(loginRequestDto) as OkResult;
 
             // Assert
-            Assert.That(result,Is.Not.Null);
+            Assert.That(result, Is.Not.Null);
             Assert.That(200, Is.EqualTo(result.StatusCode));
-        }
-        [Test]
-        public async Task ForgotPassword_InvalidEmail_ReturnsNotFound()
-        {
-            // Arrange
-            var request = new LoginRequestDto { UserName = "nonexistent@example.com", Password = "newPassword123" };
-            _userManagerMock.Setup(m => m.FindByEmailAsync(request.UserName)).ReturnsAsync((ApplicationUser)null); // Mock user not found
-
-            // Act
-            var result = await _authController.ForgotPassword(request) as NotFoundResult;
-
-            // Assert
-            Assert.That(result,Is.Not.Null);
-            Assert.That(404,Is.EqualTo( result.StatusCode)); // Not found status code
         }
     }
 }

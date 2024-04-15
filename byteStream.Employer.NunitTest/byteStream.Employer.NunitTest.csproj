@@ -19,4 +19,8 @@
 		<ProjectReference Include="..\byteStream.Auth.Api\byteStream.Auth.Api.csproj" />
 		<ProjectReference Include="..\byteStream.Employer.API\byteStream.Employer.API.csproj" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Images\" />
+	</ItemGroup>
 </Project>

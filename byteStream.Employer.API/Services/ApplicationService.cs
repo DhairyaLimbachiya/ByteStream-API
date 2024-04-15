@@ -63,15 +63,21 @@ namespace byteStream.Employer.API.Services
         public async Task<UserVacancyRequests?> UpdateAsync(UserVacancyRequests request)
         {
             var existingApplication = await db.UserVacancyRequests.FirstOrDefaultAsync(x => x.Id == request.Id);
-            if (request.ApplicationStatus == "Accepted")
+            if (existingApplication != null)
             {
                 var currentvacancy = db.Vacancies.FirstOrDefault(x => x.Id == request.VacancyId);
-                currentvacancy.NoOfVacancies = currentvacancy.NoOfVacancies - 1;
+
+                if (request.ApplicationStatus == "Accepted" && currentvacancy.NoOfVacancies>0)
+                {
+                    currentvacancy.NoOfVacancies = currentvacancy.NoOfVacancies - 1;
+                }
+
+                db.Entry(existingApplication).CurrentValues.SetValues(request);
+                await db.SaveChangesAsync();
+                return request;
             }
-          
-            db.Entry(existingApplication).CurrentValues.SetValues(request);
-            await db.SaveChangesAsync();
-            return request;
+            return null;
         }
+        
     }
     }

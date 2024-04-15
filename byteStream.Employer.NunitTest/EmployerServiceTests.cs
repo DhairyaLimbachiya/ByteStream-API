@@ -1,20 +1,22 @@
-﻿using byteStream.Employer.Api.Services;
+﻿using byteStream.Employer.Api.Models;
+using byteStream.Employer.Api.Services;
 using byteStream.Employer.API.Data;
 
 using FluentAssertions;
 
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using System;
 
-namespace JobHunt.Services.EmployerAPI.Tests
+namespace byteStream.Employer.Api.Tests
 {
     [TestFixture]
     public class EmployerServiceTests
     {
         private DbContextOptions<AppDbContext> options;
 
-        private byteStream.Employer.Api.Models.Employeer _employer1;
-        private byteStream.Employer.Api.Models.Employeer _updatedEmployer1;
+        private Employeer _employer1;
+        private Employeer _updatedEmployer1;
 
         [SetUp]
         public void Setup()
@@ -28,40 +30,41 @@ namespace JobHunt.Services.EmployerAPI.Tests
             _employer1 = new byteStream.Employer.Api.Models.Employeer
             {
                 Id = new Guid("59878AA6-BB5C-4A90-5A69-08DC39204FE5"),
-                Organization = "Green Solutions",
-                OrganizationType = "Agriculture",
-                CompanyEmail = "info@greensolutions.com",
+                Organization = "Blue Solutions",
+                OrganizationType = "Technology",
+                CompanyEmail = "info@bluesolutions.com",
                 CompanyPhone = "9988776655",
                 NoOfEmployees = 100,
-                StartYear = 2020,
+                StartYear = 2018,
                 About = "Random Description",
-                CreatedBy = "demoemployer@email.com",
-                ProfileImageUrl = "https://localhost:7284/Images/2d967414-5688-4dc0-a23a-dbf7880b19d6.jpg",
+                CreatedBy = "employer@example.com",
+                ProfileImageUrl = "https://example.com/images/profile.jpg",
+                
             };
 
             _updatedEmployer1 = new byteStream.Employer.Api.Models.Employeer
             {
                 Id = new Guid("59878AA6-BB5C-4A90-5A69-08DC39204FE5"),
-                Organization = "Medi Solutions",
+                Organization = "Red Solutions",
                 OrganizationType = "Healthcare",
-                CompanyEmail = "info@medisolutions.com",
+                CompanyEmail = "info@redsolutions.com",
                 CompanyPhone = "9988776655",
                 NoOfEmployees = 50,
-                StartYear = 2020,
+                StartYear = 2018,
                 About = "Random Description",
-                CreatedBy = "demoemployer@email.com",
-                ProfileImageUrl = "https://localhost:7284/Images/2d967414-5688-4dc0-a23a-dbf7880b19d6.jpg",
+                CreatedBy = "employer@example.com",
+                ProfileImageUrl = "https://example.com/images/profile.jpg",
             };
         }
 
         [Test]
-        public async Task GetByNameAsync_OrganizationDoesNotExists_ReturnsNull()
+        public async Task GetByNameAsync_OrganizationDoesNotExist_ReturnsNull()
         {
             // Arrange
-            string name = "Medi Solutions";
+            string name = "Nonexistent Solutions";
 
             // Act
-            byteStream.Employer.Api.Models.Employeer result;
+              Employeer result;
             using (var context = new AppDbContext(options))
             {
                 var repository = new EmployerService(context);
@@ -76,7 +79,7 @@ namespace JobHunt.Services.EmployerAPI.Tests
         public async Task GetByNameAsync_OrganizationExists_ReturnsEmployerFromDatabase()
         {
             // Arrange
-            string name = "Green Solutions";
+            string name = "Blue Solutions";
             using (var context = new AppDbContext(options))
             {
                 context.Database.EnsureDeleted();
@@ -85,7 +88,7 @@ namespace JobHunt.Services.EmployerAPI.Tests
             }
 
             // Act
-            byteStream.Employer.Api.Models.Employeer result;
+            Employeer result;
             using (var context = new AppDbContext(options))
             {
                 var repository = new EmployerService(context);
@@ -93,12 +96,9 @@ namespace JobHunt.Services.EmployerAPI.Tests
             }
 
             // Assert
-            Assert.That(result, Is.Not.Null);
+            result.Should().NotBeNull();
             result.Should().BeEquivalentTo(_employer1);
         }
-
-      
-        
 
         [Test]
         public async Task CreateAsync_AddEmployer1_CheckTheValuesFromDatabase()
@@ -119,16 +119,17 @@ namespace JobHunt.Services.EmployerAPI.Tests
             // Assert
             using (var context = new AppDbContext(options))
             {
-                var vacancyFromDb = context.Employers.FirstOrDefault(u => u.Id == new Guid("59878AA6-BB5C-4A90-5A69-08DC39204FE5"));
-                vacancyFromDb.Should().BeEquivalentTo(_employer1);
+                var employerFromDb = context.Employers.FirstOrDefault(u => u.Id == _employer1.Id);
+                employerFromDb.Should().NotBeNull();
+                employerFromDb.Should().BeEquivalentTo(_employer1);
             }
         }
 
         [Test]
-        public async Task UpdateAsync_OrganizationDoesNotExists_ReturnsNull()
+        public async Task UpdateAsync_OrganizationDoesNotExist_ReturnsNull()
         {
             // Arrange
-            byteStream.Employer.Api.Models.Employeer result;
+            Employeer result;
             using (var context = new AppDbContext(options))
             {
                 context.Database.EnsureDeleted();
@@ -166,9 +167,52 @@ namespace JobHunt.Services.EmployerAPI.Tests
             // Assert
             using (var context = new AppDbContext(options))
             {
-                var vacancyFromDb = context.Employers.FirstOrDefault(u => u.Id == new Guid("59878AA6-BB5C-4A90-5A69-08DC39204FE5"));
-                vacancyFromDb.Should().BeEquivalentTo(_updatedEmployer1);
+                var employerFromDb = context.Employers.FirstOrDefault(u => u.Id == _updatedEmployer1.Id);
+                employerFromDb.Should().NotBeNull();
+                employerFromDb.Should().BeEquivalentTo(_updatedEmployer1);
             }
+        }
+
+        [Test]
+        public async Task GetByIdAsync_ExistingEmployerId_ReturnsEmployer()
+        {
+            // Arrange
+            using (var context = new AppDbContext(options))
+            {
+                context.Database.EnsureDeleted();
+                await context.Employers.AddAsync(_employer1);
+                await context.SaveChangesAsync();
+            }
+
+            // Act
+            Employeer result;
+            using (var context = new AppDbContext(options))
+            {
+                var service = new EmployerService(context);
+                result = await service.GetByIdAsync(_employer1.Id);
+            }
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeEquivalentTo(_employer1);
+        }
+
+        [Test]
+        public async Task GetByIdAsync_NonExistingEmployerId_ReturnsNull()
+        {
+            // Arrange
+            var nonExistingId = Guid.NewGuid();
+
+            // Act
+            byteStream.Employer.Api.Models.Employeer result;
+            using (var context = new AppDbContext(options))
+            {
+                var service = new EmployerService(context);
+                result = await service.GetByIdAsync(nonExistingId);
+            }
+
+            // Assert
+            result.Should().BeNull();
         }
     }
 }

@@ -17,7 +17,8 @@ namespace byteStream.JobSeeker.Api.Models
 		public string GradeOrScore { get; set; }
 	
 		[ForeignKey("JobSeekers")]
-		public Guid UserID { get; set; }
+		public Guid UserID
+		{ get; set; }
 
 		public JobSeekers JobSeekers { get; set; }
 	}

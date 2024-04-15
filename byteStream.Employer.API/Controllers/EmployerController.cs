@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Drawing;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Claims;
 
 namespace ByteStream.Employer.Api.Controllers
@@ -21,11 +23,14 @@ namespace ByteStream.Employer.Api.Controllers
 		private readonly IMapper mapper;
 		private readonly IImageService imageService;
         protected ResponseDto response;
-        public EmployerController(IEmployerService employerService,IMapper mapper,IImageService imageService)
+        private readonly IEmailSender emailSender;
+
+        public EmployerController(IEmployerService employerService,IMapper mapper,IImageService imageService, IEmailSender emailSender)
         {
 			this.employerService = employerService;
 			this.mapper = mapper;
 			this.imageService=imageService;
+            this.emailSender = emailSender;
             response = new();
         }
 
@@ -49,7 +54,7 @@ namespace ByteStream.Employer.Api.Controllers
 		{
 			var Id = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 			var domain = await employerService.GetByIdAsync(Id);
-			if (domain == null) { return NotFound(); }
+			if (domain == null) { return NoContent(); }
 			var dto = mapper.Map<EmployerDto>(domain);
 			return Ok(dto);
 		}
@@ -149,5 +154,38 @@ namespace ByteStream.Employer.Api.Controllers
 			var dto = mapper.Map<EmployerDto>(domainModal);
 			return Ok(dto);
 		}
-	}
+
+        [HttpPost("SendEmail")]
+        public ActionResult SendEmail(EmailModel emailData)
+        {
+            var message = new MailMessage()
+            {
+                From = new MailAddress(emailData.FromEmail),
+                Subject = emailData.Subject,
+                IsBodyHtml = true,
+                Body = $"""
+                <html>
+                    <body>
+                        <h3>{emailData.Body}</h3>
+                    </body>
+                </html>
+                """
+            };
+            foreach (var toEmail in emailData.ToEmail.Split(";"))
+            {
+                message.To.Add(new MailAddress(toEmail));
+            }
+
+            SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587)
+            {
+                EnableSsl = true,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential("dhairyalimbachiya1234@gmail.com", "ipww whjs swvx voxr")
+            };
+
+            smtpClient.Send(message);
+            return Ok();
+        }
+    }
 }
+

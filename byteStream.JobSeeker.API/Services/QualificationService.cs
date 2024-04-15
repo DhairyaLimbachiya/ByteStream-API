@@ -3,7 +3,7 @@ using byteStream.JobSeeker.Api.Models;
 using byteStream.JobSeeker.API.Services.IServices;
 using Microsoft.EntityFrameworkCore;
 
-namespace byteStream.JobSeeker.Api.Repository
+namespace byteStream.JobSeeker.API.Services
 {
     public class QualificationService : IQualificationService
     {
@@ -23,12 +23,20 @@ namespace byteStream.JobSeeker.Api.Repository
 
         public async Task<Qualification?> UpdateAsync(Qualification qualification)
         {
-            dbContext.Qualifications.Update(qualification);
-            await dbContext.SaveChangesAsync();
-            return qualification;
+            var existing = await dbContext.Qualifications.FirstOrDefaultAsync(x => x.Id == qualification.Id);
+            if (existing != null)
+            {
+               
+
+                dbContext.Entry(existing).CurrentValues.SetValues(qualification);
+                await dbContext.SaveChangesAsync();
+                return qualification;
+            }
+            return null;
         }
 
-        public async Task<Qualification?> DeleteAsync(Guid id)
+
+public async Task<Qualification?> DeleteAsync(Guid id)
         {
             var existing = await dbContext.Qualifications.FirstOrDefaultAsync(x => x.Id == id);
             if (existing == null) return null;

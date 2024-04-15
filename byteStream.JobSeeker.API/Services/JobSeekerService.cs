@@ -45,10 +45,14 @@ namespace byteStream.JobSeeker.API.Services
 
         public async Task<JobSeekers?> UpdateAsync(JobSeekers jobSeeker)
         {
-            dbContext.JobSeekerss.Update(jobSeeker);
-            await dbContext.SaveChangesAsync();
-            return jobSeeker;
-
+            var existing = await dbContext.JobSeekerss.FirstOrDefaultAsync(x => x.Id == jobSeeker.Id);
+            if (existing != null)
+            {
+                dbContext.Entry(existing).CurrentValues.SetValues(jobSeeker);
+                await dbContext.SaveChangesAsync();
+                return jobSeeker;
+            }
+            return null;
         }
     }
 }

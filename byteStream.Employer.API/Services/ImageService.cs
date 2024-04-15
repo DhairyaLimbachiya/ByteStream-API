@@ -10,15 +10,15 @@ namespace byteStream.Employer.API.Services
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly AppDbContext db;
-        public ImageService(AppDbContext db, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor)
+        public ImageService( IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor)
         {
            this.webHostEnvironment = webHostEnvironment;
             this.httpContextAccessor = httpContextAccessor;
-            this.db = db;
+
         }
         public async Task<CompanyLogoDto> Upload(IFormFile file, CompanyLogoDto companyLogoDto)
         {
-            var localPath = Path.Combine(webHostEnvironment.ContentRootPath, "Images", $"{companyLogoDto.FileName}{companyLogoDto.FileExtension}");
+            var localPath = Path.Combine(webHostEnvironment.ContentRootPath, "Images", $"{companyLogoDto.FileName}.png");
             FileInfo oldFile = new FileInfo(localPath);
             if (oldFile.Exists)
             {
@@ -29,7 +29,7 @@ namespace byteStream.Employer.API.Services
             await file.CopyToAsync(stream);
 
             var httpRequest = httpContextAccessor.HttpContext.Request;
-            var urlPath = $"{httpRequest.Scheme}://{httpRequest.Host}{httpRequest.PathBase}/Images/{companyLogoDto.FileName}{companyLogoDto.FileExtension}";
+            var urlPath = $"{httpRequest.Scheme}://{httpRequest.Host}{httpRequest.PathBase}/Images/{companyLogoDto.FileName}.png";
 
             companyLogoDto.Url = urlPath;
             return companyLogoDto;

@@ -24,7 +24,7 @@ namespace ByteStream.JobSeeker.Api.Controllers
 
         [HttpGet]
         [Route("{id:Guid}")]
-        //[Authorize]
+        [Authorize]
 
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
@@ -40,12 +40,9 @@ namespace ByteStream.JobSeeker.Api.Controllers
 
         [HttpPost]
         [ValidateModel]
-        //[Authorize(Roles = "Employer")]
-
 
         public async Task<IActionResult> Create([FromBody] AddQualificationDto addRequestDto)
         {
-
             var domain = mapper.Map<Qualification>(addRequestDto);
 
             domain.UserID = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
@@ -53,20 +50,22 @@ namespace ByteStream.JobSeeker.Api.Controllers
             domain = await qualificationService.CreateAsync(domain);
             var dto = mapper.Map<QualificationDto>(domain);
             return CreatedAtAction(nameof(GetById), new { id = dto.Id }, dto);
-
-
         }
 
 
         [HttpGet]
-        // [Route("getAll/{id}")]
+    
 
         public async Task<IActionResult> GetAll()
         {
             var id = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             var domain = await qualificationService.GetAllAsync(id);
             var dto = mapper.Map<List<QualificationDto>>(domain);
-            return Ok(dto);
+            if (dto.Count==0) { return NoContent(); }
+            else
+            {
+                return Ok(dto);
+            }
         }
 
 
@@ -74,9 +73,7 @@ namespace ByteStream.JobSeeker.Api.Controllers
 
 
         [HttpPut]
-        //[Route("{id:Guid}")]
-        //[Authorize(Roles = "Employer")]
-
+        [Authorize(Roles = "JobSeeker")]
         public async Task<IActionResult> Update([FromBody] QualificationDto updateDto)
         {
             if (ModelState.IsValid)
@@ -99,7 +96,7 @@ namespace ByteStream.JobSeeker.Api.Controllers
 
         [HttpDelete]
         [Route("{id:Guid}")]
-        //[Authorize(Roles = "Employer")]
+        [Authorize(Roles = "JobSeeker")]
 
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {

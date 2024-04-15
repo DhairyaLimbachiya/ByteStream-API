@@ -32,7 +32,6 @@ namespace byteStream.JobSeeker.Api.Models
         public DateTime DOB { get; set; }
 		public ICollection<Experience> Experience { get; set; }
 		public ICollection<Qualification> Qualification { get; set; }
-		//public ICollection<UserVacancyRequests> UserVacancyRequests { get; set; }
 
 	}
 }

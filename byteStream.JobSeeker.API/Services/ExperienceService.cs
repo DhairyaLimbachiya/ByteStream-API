@@ -42,9 +42,16 @@ namespace byteStream.JobSeeker.API.Services
 
 		public async Task<Experience?> UpdateAsync(Experience experience)
 		{
-			dbContext.Experiences.Update(experience);
-			await dbContext.SaveChangesAsync();
-			return experience;
+            var existing = await dbContext.Experiences.FirstOrDefaultAsync(x => x.Id == experience.Id);
+			if (existing != null)
+			{
+                dbContext.Entry(existing).CurrentValues.SetValues(experience);
+
+               
+				await dbContext.SaveChangesAsync();
+				return experience;
+			}
+			return null;
 		}
 	}
 }
