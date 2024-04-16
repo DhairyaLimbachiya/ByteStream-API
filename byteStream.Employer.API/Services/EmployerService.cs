@@ -16,7 +16,11 @@ namespace byteStream.Employer.Api.Services
 			this.dbContext = dbContext;
 		}
 
-
+		/// <summary>
+		/// To add a new Employer profile to the Database
+		/// </summary>
+		/// <param name="employer"></param>
+		/// <returns></returns>
 		public async Task<Employeer> CreateAsync(Employeer employer)
 		{
 			await dbContext.Employers.AddAsync(employer);
@@ -24,12 +28,22 @@ namespace byteStream.Employer.Api.Services
 			return employer;
 		}
 
-
+		/// <summary>
+		/// To fetch the details of an Employer through its ID
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 		public async Task<Employeer?> GetByIdAsync(Guid id)
 		{
 			return await dbContext.Employers.FirstOrDefaultAsync(x => x.Id == id);
 		}
+		/// <summary>
+		/// To update the details of the Employer
+		/// </summary>
+		/// <param name="employer"></param>
+		/// <returns></returns>
 
+	
 		public async Task<Employeer?> UpdateAsync( Employeer employer)
 		{
 
@@ -46,6 +60,11 @@ namespace byteStream.Employer.Api.Services
 		
 		}
 
+		/// <summary>
+		/// To Delete the details of an employer using its id
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 		public async Task<Employeer?> DeleteAsync(Guid id)
 		{
 			var existing= await dbContext.Employers.FirstOrDefaultAsync(x => x.Id == id);
@@ -56,13 +75,22 @@ namespace byteStream.Employer.Api.Services
 			return existing;
 
 		}
+		/// <summary>
+		/// To get the Oranization name the employee is connected to
+		/// </summary>
+		/// <param name="Id"></param>
+		/// <returns></returns>
 		public async Task <string> GetOrganizationName(Guid Id)
 		{
             var user =await dbContext.Employers.FirstOrDefaultAsync(x=>x.Id==Id) ;
 			var OrganizationName = user.Organization;
 			return OrganizationName;
         }
-
+		/// <summary>
+		/// To get details of the Employee By Company Name
+		/// </summary>
+		/// <param name="companyName"></param>
+		/// <returns></returns>
         public async Task<Employeer?> GetByCompanyName(string companyName)
         {
 			var company = await dbContext.Employers.FirstOrDefaultAsync(u => u.Organization == companyName);

@@ -9,13 +9,20 @@ namespace byteStream.Employer.API.Services
     {
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly AppDbContext db;
+
         public ImageService( IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor)
         {
            this.webHostEnvironment = webHostEnvironment;
             this.httpContextAccessor = httpContextAccessor;
 
         }
+
+        /// <summary>
+        /// To add The InComing image file to local folder and returning its path 
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="companyLogoDto"></param>
+        /// <returns></returns>
         public async Task<CompanyLogoDto> Upload(IFormFile file, CompanyLogoDto companyLogoDto)
         {
             var localPath = Path.Combine(webHostEnvironment.ContentRootPath, "Images", $"{companyLogoDto.FileName}.png");

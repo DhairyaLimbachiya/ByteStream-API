@@ -13,14 +13,22 @@ namespace byteStream.JobSeeker.API.Services
         {
             this.dbContext = dbContext;
         }
-
+        /// <summary>
+        /// To add new Qualifciation to the Database
+        /// </summary>
+        /// <param name="qualification"></param>
+        /// <returns></returns>
         public async Task<Qualification> CreateAsync(Qualification qualification)
         {
             await dbContext.Qualifications.AddAsync(qualification);
             await dbContext.SaveChangesAsync();
             return qualification;
         }
-
+        /// <summary>
+        /// To update existing Qualification in the database
+        /// </summary>
+        /// <param name="qualification"></param>
+        /// <returns></returns>
         public async Task<Qualification?> UpdateAsync(Qualification qualification)
         {
             var existing = await dbContext.Qualifications.FirstOrDefaultAsync(x => x.Id == qualification.Id);
@@ -35,7 +43,11 @@ namespace byteStream.JobSeeker.API.Services
             return null;
         }
 
-
+        /// <summary>
+        /// To delete existing qualification from the database
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
 public async Task<Qualification?> DeleteAsync(Guid id)
         {
             var existing = await dbContext.Qualifications.FirstOrDefaultAsync(x => x.Id == id);
@@ -45,6 +57,11 @@ public async Task<Qualification?> DeleteAsync(Guid id)
             await dbContext.SaveChangesAsync();
             return existing;
         }
+        /// <summary>
+        /// To get details of qualification using its Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
 
         public async Task<Qualification?> GetByIdAsync(Guid id)
         {
@@ -52,6 +69,11 @@ public async Task<Qualification?> DeleteAsync(Guid id)
 
         }
 
+        /// <summary>
+        /// To get List of all the qualifications of any particular Jobseeker
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<List<Qualification>?> GetAllAsync(Guid id)
         {
             return await dbContext.Qualifications.Where(x => x.UserID == id).ToListAsync();

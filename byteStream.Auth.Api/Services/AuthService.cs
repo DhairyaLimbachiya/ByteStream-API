@@ -17,7 +17,11 @@ namespace byteStream.Auth.Api.Services
             _userManager = userManager;
             this.tokenservice = tokenservice;
         }
-
+        /// <summary>
+        /// To Accept the login credentials and return back a JWT Token string
+        /// </summary>
+        /// <param name="loginRequestDto"></param>
+        /// <returns></returns>
         public async Task<string?> LoginAsync(LoginRequestDto loginRequestDto)
         {
             var user = await _userManager.FindByEmailAsync(loginRequestDto.UserName);
@@ -36,6 +40,13 @@ namespace byteStream.Auth.Api.Services
             return null;
         }
 
+        /// <summary>
+        /// To Register a new User into the Database
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <param name="roleName"></param>
+        /// <returns></returns>
         public async Task<ResponseDto?> RegisterAsync(ApplicationUser user, string password, string roleName)
         {
             var res = new ResponseDto();

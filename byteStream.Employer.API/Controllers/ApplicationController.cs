@@ -30,7 +30,8 @@ namespace byteStream.Employer.API.Controllers
 
         [HttpGet]
         [Route("getAllByUser/{id}")]
-        [Authorize ]
+        [Authorize(Roles = "JobSeeker")]
+
         public async Task<IActionResult> getApplicationsByUserId([FromRoute] Guid id)
         {
             if (id == Guid.Empty)
@@ -48,7 +49,8 @@ namespace byteStream.Employer.API.Controllers
 
         [HttpGet]
         [Route("getAllByVacancy/{id}")]
-        [Authorize]
+        [Authorize(Roles = "Employer")]
+
         public async Task<IActionResult> getApplicationsByVacancyId([FromRoute] Guid id)
         {
             if (id == Guid.Empty)
@@ -104,6 +106,8 @@ namespace byteStream.Employer.API.Controllers
 
         [HttpPost]
         [Route("paginationEndpoint")]
+        [Authorize(Roles = "Employer")]
+
         [Authorize]
         public async Task<IActionResult> pagination([FromBody] SP_VacancyRequestDto request)
         {
@@ -141,6 +145,7 @@ namespace byteStream.Employer.API.Controllers
 
         [HttpPost]
         [Route("processApplication")]
+        [Authorize(Roles = "Employer")]
 
         public async Task<IActionResult> processApplication([FromBody] ApplicationStatusChangeDto request)
         {
@@ -174,12 +179,8 @@ namespace byteStream.Employer.API.Controllers
 
         public async Task<IActionResult> getDetailsbyApplication([FromRoute] Guid id)
         {
-
             var application = await applicationService.GetDetailByIdAsync(id);
-         //   mapper.Map<UserVacancyResponseDto>(application);
             return Ok(application);
-
         }
-
     }
     }

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using byteStream.JobSeeker.Api.Models;
 using byteStream.JobSeeker.Api.Models.Dto;
-using byteStream.JobSeeker.Api.Utility.ApiFilter;
 using byteStream.JobSeeker.API.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +23,7 @@ namespace ByteStream.JobSeeker.Api.Controllers
 
         [HttpGet]
         [Route("{id:Guid}")]
-        [Authorize]
+        [Authorize(Roles = "JobSeeker")]
 
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
@@ -39,7 +38,7 @@ namespace ByteStream.JobSeeker.Api.Controllers
 
 
         [HttpPost]
-        [ValidateModel]
+        [Authorize(Roles = "JobSeeker")]
 
         public async Task<IActionResult> Create([FromBody] AddQualificationDto addRequestDto)
         {
@@ -54,7 +53,8 @@ namespace ByteStream.JobSeeker.Api.Controllers
 
 
         [HttpGet]
-    
+
+        [Authorize(Roles = "JobSeeker")]
 
         public async Task<IActionResult> GetAll()
         {

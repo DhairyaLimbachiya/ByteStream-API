@@ -2,7 +2,6 @@
 using Azure;
 using byteStream.Auth.Api.Models;
 using byteStream.Auth.Api.Services.IServices;
-using byteStream.Auth.Api.Utility.ApiFilter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -31,7 +30,6 @@ namespace byteStream.Auth.Api.Controllers
 
    
         [HttpPost("register")]
-		[ValidateModel]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
         {
             var user = mapper.Map<ApplicationUser>(request);
@@ -49,7 +47,6 @@ namespace byteStream.Auth.Api.Controllers
         }
 
         [HttpPost("login")]
-		[ValidateModel]
 
 		public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
 		{

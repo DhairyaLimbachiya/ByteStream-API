@@ -11,14 +11,18 @@ namespace byteStream.JobSeeker.API.Services
     {
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly AppDbContext db;
         public UploadService( IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor)
         {
             this.webHostEnvironment = webHostEnvironment;
             this.httpContextAccessor = httpContextAccessor;
       
         }
-
+        /// <summary>
+        /// To Store the Incoming resume in Local Folder and return back its Url
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="resume"></param>
+        /// <returns></returns>
         public async Task<UploadDto> Upload(IFormFile file, UploadDto resume)
         {
             var localPath = Path.Combine(webHostEnvironment.ContentRootPath, "Resumes", $"{resume.FileName}{resume.FileExtension}");
@@ -32,6 +36,8 @@ namespace byteStream.JobSeeker.API.Services
             resume.Url = urlPath;
             return resume;
         }
+
+        /// To Store the Incoming Profile Image of JobSeeker in Local Folder and return back its Url
 
         public async Task<UploadDto> UploadImage(IFormFile file, UploadDto image)
         {

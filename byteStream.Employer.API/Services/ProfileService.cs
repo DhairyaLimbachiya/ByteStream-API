@@ -7,7 +7,11 @@ namespace byteStream.Employer.API.Services
     public class ProfileService(IHttpClientFactory httpClientFactory) : IProfileService
     {
         private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
-
+/// <summary>
+/// To get the Details of the Users from the Jobseeker Details
+/// </summary>
+/// <param name="users"></param>
+/// <returns></returns>
         public async Task<List<UserDto>>GetUsers(List<Guid> users)
         {
             var client = _httpClientFactory.CreateClient("Profile");

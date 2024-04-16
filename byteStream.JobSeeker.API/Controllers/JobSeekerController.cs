@@ -2,7 +2,6 @@
 using Azure;
 using byteStream.JobSeeker.Api.Models;
 using byteStream.JobSeeker.Api.Models.Dto;
-using byteStream.JobSeeker.Api.Utility.ApiFilter;
 using byteStream.JobSeeker.API.Models.Dto;
 using byteStream.JobSeeker.API.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
@@ -29,22 +28,21 @@ namespace byteStream.JobSeeker.API.Controllers
         }
         [HttpGet]
         [Route("{id:Guid}")]
-        [Authorize]
+       
         
         public async Task<IActionResult> GetById([FromRoute]Guid id)
-        {
-            //var id = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            var domain = await jobSeekerService.GetByIdAsync(id);
+        {  var domain = await jobSeekerService.GetByIdAsync(id);
             if (domain == null) { return NoContent(); }
             var dto = mapper.Map<JobSeekerDto>(domain);
             return Ok(dto);
         }
         [HttpGet]
-       
-        [Authorize]
+        [Authorize(Roles = "JobSeeker")]
+
         public async Task<IActionResult> GetById()
         {
             var id = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
             var domain = await jobSeekerService.GetByIdAsync(id);
             if (domain == null) { return NoContent(); }
             var dto = mapper.Map<JobSeekerDto>(domain);
@@ -53,7 +51,6 @@ namespace byteStream.JobSeeker.API.Controllers
 
 
         [HttpPost]
-        [ValidateModel]
         [Authorize(Roles = "JobSeeker")]
 
 
@@ -63,6 +60,7 @@ namespace byteStream.JobSeeker.API.Controllers
             var domain = mapper.Map<JobSeekers>(addRequestDto);
             domain.Id = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             domain.Email = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
+
             domain = await jobSeekerService.CreateAsync(domain);
             var dto = mapper.Map<JobSeekerDto>(domain);
             return Ok(dto);

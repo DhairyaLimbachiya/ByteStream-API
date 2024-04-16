@@ -51,7 +51,6 @@ namespace ByteStream.Employer.Api.Controllers
 
 
         [HttpGet]
-        [ValidateModel]
         [Authorize(Roles = "Employer")]
         public async Task<IActionResult> GetByCompany()
         {
@@ -68,7 +67,6 @@ namespace ByteStream.Employer.Api.Controllers
         }
 
         [HttpPost]
-        [ValidateModel]
         [Authorize(Roles = "Employer")]
 
 
@@ -77,8 +75,8 @@ namespace ByteStream.Employer.Api.Controllers
 
             var domain = mapper.Map<Vacancy>(addRequestDto);
             domain.PublishedDate = DateTime.UtcNow;
-            var Id = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            domain.PublishedBy = await employerService.GetOrganizationName(Id);
+            var userId = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            domain.PublishedBy = await employerService.GetOrganizationName(userId);
             domain = await vacancyService.CreateAsync(domain);
             var dto = mapper.Map<VacancyDto>(domain);
             return CreatedAtAction(nameof(GetById), new { id = dto.Id }, dto);
@@ -87,24 +85,18 @@ namespace ByteStream.Employer.Api.Controllers
         }
 
         [HttpPut]
-        [ValidateModel]
         [Authorize(Roles = "Employer")]
 
         public async Task<IActionResult> Update([FromBody] VacancyDto updateDto)
         {
-            if (ModelState.IsValid)
-            {
+            
                 var domainModal = mapper.Map<Vacancy>(updateDto);
 
                 domainModal = await vacancyService.UpdateAsync(domainModal);
                 if (domainModal == null) { return NotFound(); }
                 var dto = mapper.Map<VacancyDto>(domainModal);
                 return Ok(dto);
-            }
-            else
-            {
-                return BadRequest(ModelState);
-            }
+            
         }
 
 

@@ -31,7 +31,7 @@ builder.Services.AddScoped<IVacancyService, VacancyService>();
 builder.Services.AddScoped<IApplicationService, ApplicationService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IImageService, ImageService>();
-builder.Services.AddScoped<IEmailSender, EmailSender>();
+
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();

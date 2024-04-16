@@ -23,20 +23,18 @@ namespace ByteStream.Employer.Api.Controllers
 		private readonly IMapper mapper;
 		private readonly IImageService imageService;
         protected ResponseDto response;
-        private readonly IEmailSender emailSender;
 
-        public EmployerController(IEmployerService employerService,IMapper mapper,IImageService imageService, IEmailSender emailSender)
+        public EmployerController(IEmployerService employerService,IMapper mapper,IImageService imageService)
         {
 			this.employerService = employerService;
 			this.mapper = mapper;
 			this.imageService=imageService;
-            this.emailSender = emailSender;
             response = new();
         }
 
 		[HttpGet]
 		[Route("GetByCompanyName/{companyName}")]
-
+        [Authorize]
 		public async Task<IActionResult> GetByCompany([FromRoute]string companyName)
 		{
 			if(companyName == null) {
@@ -49,8 +47,8 @@ namespace ByteStream.Employer.Api.Controllers
 
         [HttpGet]
 		[Authorize]
-
-		public async Task<IActionResult> GetById()
+        [Authorize(Roles = "Employer")]
+        public async Task<IActionResult> GetById()
 		{
 			var Id = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 			var domain = await employerService.GetByIdAsync(Id);
@@ -156,6 +154,8 @@ namespace ByteStream.Employer.Api.Controllers
 		}
 
         [HttpPost("SendEmail")]
+        [Authorize(Roles = "Employer")]
+
         public ActionResult SendEmail(EmailModel emailData)
         {
             var message = new MailMessage()
