@@ -3,6 +3,7 @@ using byteStream.Employer.Api.Utility.ApiFilter;
 using byteStream.Employer.Api.Utility.Extension;
 using byteStream.Employer.Api.Utility.Mapping;
 using byteStream.Employer.API.Data;
+using byteStream.Employer.API.Hubs;
 using byteStream.Employer.API.Services;
 using byteStream.Employer.API.Services.IServices;
 
@@ -41,7 +42,7 @@ builder.Services.AddHttpClient("Profile", u => u.BaseAddress = new Uri(builder.C
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-
+builder.Services.AddSignalR();
 //swagger Authentication
 builder.Services.AddSwaggerGen(option =>
 {
@@ -69,6 +70,21 @@ builder.Services.AddSwaggerGen(option =>
 });
 
 
+builder.Services.AddCors(options =>
+
+{
+
+	options.AddPolicy("CorsPolicy", builder => builder
+
+		.WithOrigins("http://localhost:4200")
+
+		.AllowAnyMethod()
+
+		.AllowAnyHeader()
+
+		.AllowCredentials());
+
+});
 
 var app = builder.Build();
 
@@ -87,14 +103,9 @@ app.UseStaticFiles(new StaticFileOptions
 app.UseHttpsRedirection();
 
 //CORS Policy
-app.UseCors(options =>
-{
-    options.AllowAnyHeader();
-    options.AllowAnyOrigin();
-    options.AllowAnyMethod();
-});
+app.UseCors("CorsPolicy");
 app.UseAuthentication();
-
+app.MapHub<UpdateEmployerHubs>("/hubs/updateEmployer");
 app.UseAuthorization();
 
 app.MapControllers();

@@ -34,8 +34,9 @@ namespace ByteStream.Employer.Api.Controllers
 
 		[HttpGet]
 		[Route("GetByCompanyName/{companyName}")]
-        [Authorize]
-		public async Task<IActionResult> GetByCompany([FromRoute]string companyName)
+        
+
+        public async Task<IActionResult> GetByCompany([FromRoute]string companyName)
 		{
 			if(companyName == null) {
 				return BadRequest();
@@ -46,7 +47,6 @@ namespace ByteStream.Employer.Api.Controllers
         }
 
         [HttpGet]
-		[Authorize]
         [Authorize(Roles = "Employer")]
         public async Task<IActionResult> GetById()
 		{
@@ -122,8 +122,7 @@ namespace ByteStream.Employer.Api.Controllers
 		[Authorize(Roles = "Employer")]
 		public async Task<IActionResult> Update([FromBody] EmployerDto updateDto)
 		{
-			if (ModelState.IsValid)
-			{
+			
 				var domainModal = mapper.Map<Employeer>(updateDto);
                 domainModal.CreatedBy = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
                 domainModal.Id = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
@@ -131,11 +130,7 @@ namespace ByteStream.Employer.Api.Controllers
 				if (domainModal == null) { return NotFound(); }
 				var dto = mapper.Map<EmployerDto>(domainModal);
 				return Ok(dto);
-			}
-			else
-			{
-				return BadRequest(ModelState);
-			}
+			
 		}
 
 
