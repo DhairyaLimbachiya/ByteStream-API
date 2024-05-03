@@ -8,6 +8,7 @@
   </PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Aspose.Slides.NET" Version="24.4.0" />
 		<PackageReference Include="AutoMapper" Version="13.0.1" />
 
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
@@ -26,6 +27,7 @@
 	<ItemGroup>
 	  <Folder Include="Images\" />
 	  <Folder Include="Migrations\" />
+	  <Folder Include="PPT\" />
 	</ItemGroup>
 
 </Project>

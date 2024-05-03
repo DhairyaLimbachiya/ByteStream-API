@@ -9,8 +9,8 @@ namespace byteStream.JobSeeker.Api.Utility.Mapping
 	{
 		public AutoMapperProfile()
 		{
-		
-		
+			
+
 			CreateMap<AddJobSekerDto, JobSeekers>().ReverseMap();
 			CreateMap<JobSeekerDto, JobSeekers>().ReverseMap();
 
