@@ -219,7 +219,7 @@ namespace byteStreamNunitTest
 
 
         [Test]
-        public async Task Update_InvalidData_ReturnsBadRequest()
+        public async Task Update_InvalidData_ReturnsNotFound()
         {
             // Arrange
             _controller.ModelState.AddModelError("Error", "Invalid update data");
@@ -237,7 +237,7 @@ namespace byteStreamNunitTest
             var result = await _controller.Update(invalidUpdateDto);
 
             // Assert
-            Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
+            Assert.That(result, Is.TypeOf<NotFoundResult>());
         }
 
         [Test]
