@@ -1,0 +1,67 @@
+version: '3.4'
+
+services:
+  authdb:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+       - SA_PASSWORD=MyPass@word
+       - ACCEPT_EULA=Y
+    ports:
+       - "5533:1433"
+    volumes:
+       - authdbvol:/var/opt/mssql
+  bytestream.auth.api:
+    image: ${DOCKER_REGISTRY-}bytestreamauthapi
+    build:
+      context: .
+      dockerfile: byteStream.Auth.Api/Dockerfile
+    ports:
+       - 7002:8081
+       - 7011:8080
+ 
+
+
+
+  employerdb:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+       - SA_PASSWORD=MyPass@word
+       - ACCEPT_EULA=Y
+    ports:
+       - "5534:1433"
+    volumes:
+       - employerdbvol:/var/opt/mssql
+  bytestream.employer.api:
+    image: ${DOCKER_REGISTRY-}bytestreamemployerapi
+    build:
+      context: .
+      dockerfile: byteStream.Employer.Api/Dockerfile
+    ports:
+       - 7003:8081
+       - 7012:8080
+
+
+  jobseekerdb:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+       - SA_PASSWORD=MyPass@word
+       - ACCEPT_EULA=Y
+    ports:
+       - "5535:1433"
+    volumes:
+       - jobseekerdbvol:/var/opt/mssql
+  bytestream.jobseeker.api:
+    image: ${DOCKER_REGISTRY-}bytestreamjobseekerapi
+    build:
+      context: .
+      dockerfile: byteStream.JobSeeker.Api/Dockerfile
+    ports:
+       - 7004:8081
+       - 7013:8080
+ 
+  
+   
+volumes:
+   authdbvol :
+   employerdbvol :
+   jobseekerdbvol :

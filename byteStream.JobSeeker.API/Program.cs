@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
+using System.Net;
 using System.Text.Json.Serialization;
 using System.Xml;
 
@@ -34,6 +35,10 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+ServicePointManager.ServerCertificateValidationCallback +=
+    (sender, certificate, chain, errors) => {
+        return true;
+    };
 builder.Services.AddSwaggerGen(option =>
 {
     option.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme, securityScheme: new OpenApiSecurityScheme
@@ -80,12 +85,16 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 //  for Providing path --ResumesFolder--
+Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "Resumes"));
+
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Resumes")),
     RequestPath = "/Resumes"
 });
 
+
+Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "Images"));
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images")),
